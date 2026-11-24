@@ -1,0 +1,133 @@
+{
+  "name": "mcdc-sbfl-localizer",
+  "displayName": "MC/DC-SBFL Fault Localizer",
+  "description": "Sub-expression level Spectrum-Based Fault Localization using MC/DC condition probes (Tarantula, Ochiai, DStar).",
+  "version": "1.0.0",
+  "publisher": "prashasti1005",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Prashasti1005/mcdc-sbfl-localizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Prashasti1005/mcdc-sbfl-localizer/issues"
+  },
+  "homepage": "https://github.com/Prashasti1005/mcdc-sbfl-localizer#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Debuggers",
+    "Testing",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:c",
+    "onLanguage:cpp",
+    "onCommand:mcdcSbfl.runLocalization",
+    "onCommand:mcdcSbfl.initConfig"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mcdcSbfl.runLocalization",
+        "title": "MC/DC-SBFL: Run Fault Localization",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "mcdcSbfl.initConfig",
+        "title": "MC/DC-SBFL: Create .vscode/mcdc-sbfl.json Config",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "mcdcSbfl.switchFormula",
+        "title": "MC/DC-SBFL: Switch Formula (Tarantula / Ochiai / DStar)",
+        "icon": "$(symbol-operator)"
+      },
+      {
+        "command": "mcdcSbfl.clearHighlights",
+        "title": "MC/DC-SBFL: Clear Heatmap Highlights",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "mcdcSbfl.jumpToSuspect",
+        "title": "Jump to Suspect Sub-Condition"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mcdc-sbfl-explorer",
+          "title": "MC/DC Fault Localizer",
+          "icon": "$(bug)"
+        }
+      ]
+    },
+    "views": {
+      "mcdc-sbfl-explorer": [
+        {
+          "id": "mcdcSbflSuspectsView",
+          "name": "Ranked Suspects (Sub-Conditions & Statements)"
+        }
+      ]
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "mcdcSbfl.runLocalization",
+          "when": "editorLangId == c || editorLangId == cpp",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "mcdcSbfl.runLocalization",
+          "when": "view == mcdcSbflSuspectsView",
+          "group": "navigation"
+        },
+        {
+          "command": "mcdcSbfl.switchFormula",
+          "when": "view == mcdcSbflSuspectsView",
+          "group": "navigation"
+        },
+        {
+          "command": "mcdcSbfl.clearHighlights",
+          "when": "view == mcdcSbflSuspectsView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MC/DC-SBFL Fault Localizer",
+      "properties": {
+        "mcdcSbfl.activeFormula": {
+          "type": "string",
+          "enum": [
+            "Tarantula",
+            "Ochiai",
+            "DStar"
+          ],
+          "default": "Ochiai",
+          "description": "Active SBFL suspiciousness formula used for ranking and heatmap coloring."
+        },
+        "mcdcSbfl.topKDisplay": {
+          "type": "number",
+          "default": 50,
+          "description": "Maximum number of ranked suspect probes shown in the sidebar."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^4.1.1",
+    "typescript": "^5.3.3"
+  }
+}
